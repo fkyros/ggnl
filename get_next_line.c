@@ -6,13 +6,23 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/17 20:30:06 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:26:18 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*extract_line_from_stash(char *stash)
+int	ft_strlen_nl(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i] != '\n')
+		i++;
+	return (i);
+}
+
+char	*extract_line_from_stash(char *stash, int bytes_read)
 {
 	char	*res;
 	int		tam;
@@ -20,11 +30,17 @@ char	*extract_line_from_stash(char *stash)
 
 	if (!stash)
 		return (NULL);
-	i = 0;
-	tam = ft_strchr(stash, '\n') - stash + 1;
+	if (bytes_read)
+		tam = ft_strlen_nl(stash) + 1;
+		//tam = ft_strchr(stash, '\n') - stash + 1;
+	else
+		tam = ft_strlen(stash) + 1;
+	if (ft_strlen(stash) == 0)
+		return (NULL);
 	res = (char *) malloc(tam);
 	if (!res)
 		return (NULL);
+	i = 0;
 	while (i < tam)
 	{
 		res[i] = *stash;
@@ -35,7 +51,7 @@ char	*extract_line_from_stash(char *stash)
 	return (res);
 }
 
-char	*delete_line_from_stash(char *stash)
+char	*delete_line_from_stash(char *stash, int bytes_read)
 {
 	char	*res;
 	char	*remnants;
@@ -43,7 +59,10 @@ char	*delete_line_from_stash(char *stash)
 
 	if (!stash)
 		return (NULL);
-	remnants = ft_strchr(stash, '\n');
+	if (bytes_read)
+		remnants = ft_strchr(stash, '\n');
+	else
+		remnants = stash;
 	tam = ft_strlen(++remnants);
 	res = (char *) malloc(tam + 1);
 	if (!res)
@@ -65,7 +84,9 @@ char	*get_next_line(int fd)
 	while (!ft_strchr(stash, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read <= 0)
+		if (!bytes_read)
+			break;
+		if (bytes_read < 0)
 		{
 			if (stash)
 				free(stash);
@@ -75,14 +96,12 @@ char	*get_next_line(int fd)
 		buffer[bytes_read] = '\0';
 		stash = join_stash_with_buffer(stash, buffer);
 	}
-	/*if (bytes_read == 0)
+	line = extract_line_from_stash(stash, bytes_read);
+	stash = delete_line_from_stash(stash, bytes_read);
+	if (!bytes_read && stash)
 	{
-		if (stash)
-			free(stash);
+		free(stash);
 		stash = NULL;
-		return (NULL);
-	}*/
-	line = extract_line_from_stash(stash);
-	stash = delete_line_from_stash(stash);
+	}
 	return (line);
 }

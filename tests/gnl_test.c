@@ -7,10 +7,12 @@ int main()
 {
 	int fd;
 
-	fd = open("41_no_nl", O_RDONLY);
+	fd = open("nl", O_RDONLY);
 	char *line;
 	while ((line = get_next_line(fd)))
 	{
+		if (line == NULL)
+			printf("la siguiente es nula!\n");
 		printf("\"%s\" ", line);
 		free(line);
 	}
