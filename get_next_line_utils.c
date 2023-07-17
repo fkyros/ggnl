@@ -6,9 +6,11 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 23:13:06 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/16 23:34:51 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/17 20:18:39 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "get_next_line.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -17,6 +19,8 @@ char	*ft_strchr(const char *s, int c)
 
 	i = 0;
 	found = 0;
+	if (!s)
+		return (NULL);
 	while (!found && s[i])
 	{
 		if (s[i] == (char)c)
@@ -44,26 +48,29 @@ void	copy_string_from_index(const char *src, char *dst, int i)
 	}
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*join_stash_with_buffer(char *stash, char *buffer)
 {
 	char	*res;
 	int		tam;
 
-	if (s1 == NULL && s2 == NULL)
+	if (stash == NULL && buffer == NULL)
 		return (NULL);
-	tam = gnl_strlen(s1) + gnl_strlen(s2) + 1;
+	tam = ft_strlen(stash) + ft_strlen(buffer) + 1;
 	res = (char *) malloc(tam);
 	if (res == NULL)
 		return (NULL);
-	if (s1 != NULL)
-		copy_string_from_index(s1, res, 0);
-	if (s2 != NULL)
-		copy_string_from_index(s2, res, gnl_strlen(s1));
+	if (stash != NULL)
+	{
+		copy_string_from_index(stash, res, 0);
+		free(stash);
+	}
+	if (buffer != NULL)
+		copy_string_from_index(buffer, res, ft_strlen(stash));
 	res[tam - 1] = '\0';
 	return (res);
 }
 
-int	gnl_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	int	i;
 
