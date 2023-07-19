@@ -7,7 +7,7 @@ int main()
 {
 	int fd;
 
-	fd = open("nl", O_RDONLY);
+	fd = open("big_line_no_nl", O_RDONLY);
 	char *line;
 	while ((line = get_next_line(fd)))
 	{
@@ -16,5 +16,6 @@ int main()
 		printf("\"%s\" ", line);
 		free(line);
 	}
+	close(fd);
 	return (0);
 }

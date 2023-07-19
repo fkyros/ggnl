@@ -6,7 +6,7 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 23:13:06 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/17 20:18:39 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/19 21:10:31 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,17 @@ char	*join_stash_with_buffer(char *stash, char *buffer)
 
 	if (stash == NULL && buffer == NULL)
 		return (NULL);
-	tam = ft_strlen(stash) + ft_strlen(buffer) + 1;
-	res = (char *) malloc(tam);
+	tam = ft_strlen(stash) + ft_strlen(buffer);
+	res = (char *) malloc(tam + 1);
 	if (res == NULL)
 		return (NULL);
 	if (stash != NULL)
-	{
 		copy_string_from_index(stash, res, 0);
-		free(stash);
-	}
 	if (buffer != NULL)
 		copy_string_from_index(buffer, res, ft_strlen(stash));
-	res[tam - 1] = '\0';
+	res[tam] = '\0';
+	if (stash)
+		free(stash);
 	return (res);
 }
 
@@ -75,7 +74,9 @@ int	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
-	while (s && s[i])
+	if (!s)
+		return (0);
+	while (s[i])
 		i++;
 	return (i);
 }
@@ -85,6 +86,10 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	size_t	i;
 
 	i = 0;
+	if (!src)
+		return (i);
+	if (!dstsize)
+		dst = NULL;
 	if (dstsize > 0)
 	{
 		while (src[i] && i < dstsize - 1)

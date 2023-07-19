@@ -6,21 +6,11 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/17 21:26:18 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/19 21:08:46 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-int	ft_strlen_nl(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i] != '\n')
-		i++;
-	return (i);
-}
 
 char	*extract_line_from_stash(char *stash, int bytes_read)
 {
@@ -31,23 +21,23 @@ char	*extract_line_from_stash(char *stash, int bytes_read)
 	if (!stash)
 		return (NULL);
 	if (bytes_read)
-		tam = ft_strlen_nl(stash) + 1;
-		//tam = ft_strchr(stash, '\n') - stash + 1;
+		//tam = ft_strlen_nl(stash) + 1;
+		tam = ft_strchr(stash, '\n') - stash + 1;
 	else
-		tam = ft_strlen(stash) + 1;
+		tam = ft_strlen(stash);
 	if (ft_strlen(stash) == 0)
 		return (NULL);
-	res = (char *) malloc(tam);
+	res = (char *) malloc(tam + 1);
 	if (!res)
 		return (NULL);
 	i = 0;
-	while (i < tam)
+	while (i < tam /*&& *stash != '\0'*/)
 	{
 		res[i] = *stash;
 		i++;
 		stash++;
 	}
-	res[i] = '\0';
+	res[tam] = '\0';
 	return (res);
 }
 
@@ -68,13 +58,14 @@ char	*delete_line_from_stash(char *stash, int bytes_read)
 	if (!res)
 		return (NULL);
 	ft_strlcpy(res, remnants, tam + 1);
+	res[tam] = '\0';
 	free(stash);
 	return (res);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash = NULL;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			bytes_read;
