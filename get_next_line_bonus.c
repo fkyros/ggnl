@@ -6,11 +6,11 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/19 21:45:08 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/19 21:47:40 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*extract_line_from_stash(char *stash, int bytes_read)
 {
@@ -63,34 +63,34 @@ char	*delete_line_from_stash(char *stash, int bytes_read)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
+	static char	*stash[OPEN_MAX];
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (!ft_strchr(stash, '\n'))
+	while (!ft_strchr(stash[fd], '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (!bytes_read)
 			break;
 		if (bytes_read < 0)
 		{
-			if (stash)
-				free(stash);
-			stash = NULL;
+			if (stash[fd])
+				free(stash[fd]);
+			stash[fd] = NULL;
 			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
-		stash = join_stash_with_buffer(stash, buffer);
+		stash[fd] = join_stash_with_buffer(stash[fd], buffer);
 	}
-	line = extract_line_from_stash(stash, bytes_read);
-	stash = delete_line_from_stash(stash, bytes_read);
-	if (!bytes_read && stash)
+	line = extract_line_from_stash(stash[fd], bytes_read);
+	stash[fd] = delete_line_from_stash(stash[fd], bytes_read);
+	if (!bytes_read && stash[fd])
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 	}
 	return (line);
 }
