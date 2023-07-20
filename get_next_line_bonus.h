@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 22:59:27 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/19 21:41:39 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/20 20:00:35 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@
 # endif
 
 char	*get_next_line(int fd);
+
 int		ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+void	copy_string_from_index(const char *src, char *dst, int i);
 
-char	*extrac_line_from_stash(char *stash, int bytes_read);
+int		read_into_buffer(int fd, char *buffer);
+char	*extract_line_from_stash(char *stash, int bytes_read);
 char	*join_stash_with_buffer(char *stash, char *buffer);
 char	*delete_line_from_stash(char *stash, int bytes_read);
 

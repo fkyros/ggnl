@@ -6,7 +6,7 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 23:13:06 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/19 21:10:31 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/20 17:48:01 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,6 @@ void	copy_string_from_index(const char *src, char *dst, int i)
 		j++;
 		i++;
 	}
-}
-
-char	*join_stash_with_buffer(char *stash, char *buffer)
-{
-	char	*res;
-	int		tam;
-
-	if (stash == NULL && buffer == NULL)
-		return (NULL);
-	tam = ft_strlen(stash) + ft_strlen(buffer);
-	res = (char *) malloc(tam + 1);
-	if (res == NULL)
-		return (NULL);
-	if (stash != NULL)
-		copy_string_from_index(stash, res, 0);
-	if (buffer != NULL)
-		copy_string_from_index(buffer, res, ft_strlen(stash));
-	res[tam] = '\0';
-	if (stash)
-		free(stash);
-	return (res);
 }
 
 int	ft_strlen(const char *s)
