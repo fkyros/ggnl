@@ -6,7 +6,7 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/21 13:27:10 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/21 13:52:05 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*get_next_line(int fd)
 		bytes_read = read_into_buffer(fd, buffer);
 		if (!bytes_read)
 			break ;
-		if (bytes_read < 0 && stash)
+		if (bytes_read < 0)
 		{
 			(free(stash), stash = NULL);
 			return (NULL);
@@ -117,7 +117,7 @@ char	*get_next_line(int fd)
 	}
 	line = extract_line_from_stash(stash, bytes_read);
 	stash = delete_line_from_stash(stash, bytes_read);
-	if (!bytes_read && stash)
+	if (!bytes_read)
 		(free(stash), stash = NULL);
 	return (line);
 }
