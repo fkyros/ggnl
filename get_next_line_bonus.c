@@ -6,15 +6,11 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/20 19:57:56 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/21 13:27:08 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
-#ifndef OPEN_MAX
-# define OPEN_MAX 1024
-#endif
 
 char	*join_stash_with_buffer(char *stash, char *buffer)
 {
@@ -91,6 +87,8 @@ int	read_into_buffer(int fd, char *buffer)
 	int	bytes_read;
 
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read < 0)
+		return (bytes_read);
 	buffer[bytes_read] = '\0';
 	return (bytes_read);
 }
@@ -102,15 +100,15 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 1;
 	while (!ft_strchr(stash[fd], '\n'))
 	{
 		bytes_read = read_into_buffer(fd, buffer);
 		if (!bytes_read)
-			break;
-		if (bytes_read < 0 && stash[fd])
+			break ;
+		if (bytes_read < 0)
 		{
 			(free(stash[fd]), stash[fd] = NULL);
 			return (NULL);
@@ -119,7 +117,7 @@ char	*get_next_line(int fd)
 	}
 	line = extract_line_from_stash(stash[fd], bytes_read);
 	stash[fd] = delete_line_from_stash(stash[fd], bytes_read);
-	if (!bytes_read && stash[fd])
+	if (!bytes_read)
 		(free(stash[fd]), stash[fd] = NULL);
 	return (line);
 }

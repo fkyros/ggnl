@@ -6,7 +6,7 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/20 20:03:06 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/21 13:27:10 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	read_into_buffer(int fd, char *buffer)
 	int	bytes_read;
 
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read < 0)
+		return (bytes_read);
 	buffer[bytes_read] = '\0';
 	return (bytes_read);
 }
@@ -98,14 +100,14 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 1;
 	while (!ft_strchr(stash, '\n'))
 	{
 		bytes_read = read_into_buffer(fd, buffer);
 		if (!bytes_read)
-			break;
+			break ;
 		if (bytes_read < 0 && stash)
 		{
 			(free(stash), stash = NULL);
