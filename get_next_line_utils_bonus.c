@@ -6,11 +6,11 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 23:13:06 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/20 17:48:58 by gade-oli         ###   ########.fr       */
+/*   Updated: 2023/07/31 17:08:31 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strchr(const char *s, int c)
 {
