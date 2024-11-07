@@ -6,7 +6,7 @@
 /*   By: gade-oli <gade-oli@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 21:45:04 by gade-oli          #+#    #+#             */
-/*   Updated: 2023/07/21 13:52:05 by gade-oli         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:15:49 by gade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ char	*delete_line_from_stash(char *stash, int bytes_read)
 	else
 		remnants = stash;
 	tam = ft_strlen(remnants);
+	if (tam == 0)
+	{
+		free(stash);
+		return (NULL);
+	}
 	res = (char *) malloc(tam + 1);
 	if (!res)
 		return (NULL);
